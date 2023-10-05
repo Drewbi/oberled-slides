@@ -221,6 +221,7 @@
                             <li>Great developer experience</li>
                             <li>Right level of abstractions for me</li>
                         </ul>
+                        <p>Rule number 1: If you hear about a new technology at a conference, you have to immediately use it</p>
                     </aside>
                 </section>
                 <section data-auto-animate>
@@ -304,7 +305,7 @@
                 <section>
                     <img src="./assets/diagrams/sequence.png" alt="order of pixels diagram">
                 </section>
-                <section>
+                <section data-visibility="visible">
                     <section data-auto-animate>
                         <div class="r-hstack" style="gap: 100px;">
                             <div data-id="frame1" class="pixel-grid portrait">
@@ -471,7 +472,7 @@
                                 <div data-id="16" class="pixel on" style="grid-column: 1; grid-row: 1;"></div><div data-id="15" class="pixel" style="grid-column: 2; grid-row: 1;"></div><div data-id="14" class="pixel" style="grid-column: 2; grid-row: 2;"></div><div data-id="13" class="pixel on" style="grid-column: 1; grid-row: 2;"></div><div data-id="12" class="pixel on" style="grid-column: 3; grid-row: 1;"></div><div data-id="11" class="pixel" style="grid-column: 4; grid-row: 1;"></div><div data-id="10" class="pixel" style="grid-column: 4; grid-row: 2;"></div><div data-id="9" class="pixel on" style="grid-column: 3; grid-row: 2;"></div><div data-id="8" class="pixel" style="grid-column: 3; grid-row: 3;"></div><div data-id="7" class="pixel on" style="grid-column: 4; grid-row: 3;"></div><div data-id="6" class="pixel on" style="grid-column: 4; grid-row: 4;"></div><div data-id="5" class="pixel" style="grid-column: 3; grid-row: 4;"></div><div data-id="4" class="pixel" style="grid-column: 1; grid-row: 3;"></div><div data-id="3" class="pixel on" style="grid-column: 2; grid-row: 3;"></div><div data-id="2" class="pixel on" style="grid-column: 2; grid-row: 4;"></div><div data-id="1" class="pixel" style="grid-column: 1; grid-row: 4;"></div>
                             </div>
                         </div>
-                        <small><a href="#/21">Restart</a></small>
+                        <small><a href="#/28">Restart</a></small>
                     </section>
                 </section>
                 <section>
@@ -484,6 +485,12 @@
                         <p>Tried to make a mapping function, wasn't working out</p>
                         <p>This is how the other guy did it</p>
                     </aside>
+                </section>
+                <section>
+                    <div class="r-vstack">
+                        <img class="r-frame" height="500px" src="./assets/demos/monalisa.jpg" alt="the monalisa, in pixel form">
+                        <small>Better than the original 🥴</small>
+                    </div>
                 </section>
                 <section>
                     <video class="r-frame" height="500px" data-autoplay src="./assets/demos/morph.mp4" alt="screen animation showing a morphing pattern" loop></video>
@@ -513,8 +520,11 @@
                     <small>Abstraction 2:</small>
                     <br>
                     <h3>Cursor</h3>
+                    <aside class="notes">
+                        <p>Inspired by python turtle from my first programming unit</p>
+                    </aside>
                 </section>
-                <section>
+                <section data-visibility="visible">
                     <pre class="r-frame"><code data-trim data-line-numbers="26-30|46-53|55-66">
                         EMPTY_FRAME ::= #[
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -583,24 +593,78 @@
                             can_move x/int y/int:
                                 return x + current_x >= 0 and x + current_x < 16 and y + current_y >= 0 and y + current_y < 16
                     </code></pre>
-                    <aside class="notes">
-                        <p>Inspired by python turtle from my first programming unit</p>
-                    </aside>
+                </section>
+                <section data-auto-animate>
+                    <video class="r-frame" width="700px" data-autoplay src="./assets/demos/chase.mp4" alt="screen animation showing a series of lines changing over time" loop></video>
+                </section>
+                <section data-auto-animate>
+                    <div class="r-vstack">
+                        <video class="r-frame" width="500px" data-autoplay src="./assets/demos/chase.mp4" alt="screen animation showing a series of lines changing over time" loop></video>
+                        <pre class="r-frame"><code data-trim data-line-numbers>                            
+                            run:
+                                dotPos_ = []
+                                16.repeat:
+                                    dotPos_.add (random 16)
+                                16.repeat: |line|
+                                    16.repeat: |i|
+                                        frame_.set_current (line+i)%16 dotPos_[i]
+                                        frame_.flip_pixel_at_current
+                                        screen_.display frame_.get
+                                        sleep --ms=(random 20 100)
+                        </code></pre>
+                    </div>
                 </section>
                 <section>
-                    <img src="./assets/demos/chase.gif" alt="">
+                    <div class="r-stack fragments">
+                        <video class="r-frame" height="600px" data-autoplay src="./assets/demos/cells.mp4" alt="screen animation showing a pixel cell colonies growing" loop></video>
+                        <pre class="r-frame fragment"><code data-trim data-line-numbers="1-2|5-6|8-12|14-17|19-23|24">                            
+                            4.repeat:
+                                cellList.add { "x": (random 16), "y": (random 16) }
+
+                            run:
+                                cellList.do: | cell |
+                                    frame_.set_current cell["x"] cell["y"]
+
+                                    while true:
+                                        if frame_.get_pixel_at_current == 0:
+                                            frame_.set_pixel_at_current 1
+                                            screen_.display frame_.get
+                                            break
+                                        else:
+                                            if (random 2) == 0:
+                                                frame_.move_current (random 3) - 1 0
+                                            else:
+                                                frame_.move_current 0 (random 3) - 1
+                                                
+                                            frame_.flip_pixel_at_current
+                                            screen_.display frame_.get
+                                            sleep --ms=10
+                                            frame_.flip_pixel_at_current
+                                            screen_.display frame_.get
+                                    sleep --ms=100
+                        </code></pre>
+                    </div>
+                </section>
+                <section class="fragments">
+                    <h3>Review</h3>
+                    <ul>
+                        <li>Fully procedural</li>
+                        <li>Still straightforward</li>
+                        <li>Can generate complex behaivior</li>
+                        <li>Low level of abstraction (Imperative)</li>
+                    </ul>
+                    <h2 class="fragment">7/10</h2>
                 </section>
                 <section>
-                    good for dynamic behaivior but not for large scale updates
-                    <aside class="notes">wip</aside>
+                    <h3>The process</h3>
+                    <div class="r-hstack fragments" style="gap: 20px;">
+                        <small class="r-frame fragment" style="padding: 10px;">Think of basic rule</small>
+                        <small class="r-frame fragment" style="padding: 10px;">Look for emergent patterns</small>
+                        <small class="r-frame fragment" style="padding: 10px;">Experiment</small>
+                    </div>
                 </section>
                 <section>
-                    <p>The process</p>
-                    <p>Looking for emergent patterns</p>
-                    <p>Hard to think up a full final concept, have to experiment</p>
-                </section>
-                <section>
-                    Showcase vs Decoration
+                    <h4>Showcase</h4><small>vs</small><h4>Decoration</h4>
                 </section>
 <!--             ___  ___  ___ _______      ___   ___ ___ 
                 / __|/ _ \| __|_   _\ \    / /_\ | _ \ __|
@@ -617,14 +681,14 @@
                     <img width="500px" src="./assets/multiplayerqr.png" alt="mysterious qr code">
                 </section>
                 <section data-auto-animate>
-                    <img height="400px" src="./assets/cloudflarearch.png">
+                    <img height="400px" src="./assets/diagrams/cloudflarearch.png">
                     <div class="r-hstack" style="gap: 100px;">
                         <a href="https://oberled-ui.pages.dev/">oberled-ui.pages.dev</a>
                         <img width="200px" src="./assets/multiplayerqr.png" alt="mysterious qr code">
                     </div>
                 </section>
                 <section>
-                    A few thoughts (and limitations) regarding toit
+                    <h4>Toit</h4><small><em>in summary</em></small>
                     <aside class="notes">
                         <p>the new language was a net negative</p>
                         <p>hard to find examples because new</p>
@@ -633,10 +697,34 @@
                     </aside>
                 </section>
                 <section>
-                    Limitations of the screen
+                    <h4>Limitations</h4><small>of screen</small>
+                    <div class="r-hstack fragments" style="gap: 20px;">
+                        <div class="r-stack"><img class="r-frame" width="200px" src="./assets/monalisafullres.png" alt="monalisa full resolution"><h3 class="fragment">❌</h3></div>
+                        <div class="r-stack"><img class="r-frame" width="200px" src="./assets/monalisacolour.png" alt="monalisa pixilated"><h3 class="fragment">❌</h3></div>
+                        <div class="r-stack"><img class="r-frame" width="200px" src="./assets/monalisacontrast.png" alt="monalisa black and white"><h3 class="fragment">❓</h3></div>
+                    </div>
                 </section>
                 <section>
-                    Noticed ikea has brightness (HOW)
+                    <h4>Brightness?</h4>
+                    <video class="r-frame" height="500px" data-autoplay src="./assets/ikeabrightness.mp4" alt="brightness demo in store" loop></video>
+                </section>
+                <section>
+                    <h4>PWM</h4>
+                    <small>Pulse Width Modulation</small>
+                    <aside class="notes">
+                        <p>Thinking in on or off but LEDs can have brightness</p>
+                        <p>Data pins ARE on or off</p>
+                        <p>Flicker them fast enough and the LED gets a lower average voltage</p>
+                    </aside>
+                </section>
+                <section>
+                    <h4>How are they doing this?</h4>
+                    <img class="r-frame" height="400px" src="./assets/pwmexample.png" alt="example of board dimming some pixels">
+                    <aside class="notes">
+                        <p>Microcontroller is digital</p>
+                        <p>Board and registers are digital</p>
+                        <p>Unless? (fast framerate)</p>
+                    </aside>
                 </section>
                 <section data-auto-animate>
                     <img style="filter: invert();" src="./assets/rustlogo.png" alt="rust logo" height="300px">
@@ -665,44 +753,63 @@
                     </aside>
                 </section>
                 <section>
-                    Chip swap
+                    <small>me last week:</small>
+                    <h3>Time for a rewrite</h3>
+                    <aside class="notes">
+                        <p>Any rust experts, I need to ask you some questions after</p>
+                    </aside>
                 </section>
                 <section>
-                    The rust journey (short)
+                    <small><em><strike>live coding?</strike></em></small>
+                    <h3>LIVE HARDWARE SURGERY</h3>
                 </section>
                 <section>
-                    BRIGHTNESS ACHIEVED
+                    <h4>It works!</h4>
+                    <video class="r-frame" height="500px" data-autoplay src="./assets/demos/brightnesscontrol.mp4" alt="mode demonstrating brightness control" loop></video>
                 </section>
-                <section>
-                    Noise art
-                </section>
-                <section>
-                    Rasterisation
+                <section class="fragments">
+                    <h3>Can it run ___?</h3>
+                    <p class="fragment"><em>no</em></p>
+                    <aside class="notes">
+                        <p>Rust is fast</p>
+                        <p>Brightness requires as many frames as possible</p>
+                        <p>Rasterisation, antialiasing and gradient noise would be sweet but this thing can't do both</p>
+                        <p>Trust me I tried</p>
+                    </aside>
                 </section>
 <!--             ___ ___  _  _  ___ _   _   _ ___ ___ ___  _  _ 
                 / __/ _ \| \| |/ __| | | | | / __|_ _/ _ \| \| |
                | (_| (_) | .` | (__| |_| |_| \__ \| | (_) | .` |
                 \___\___/|_|\_|\___|____\___/|___/___\___/|_|\_|
  -->
-                <section>
+                <section data-auto-animate>
                     <small><em>key</em></small>
-                    <h1>Takeaways</h1>
+                    <h4>Takeaways</h4>
+                    <div class="r-stack fragments">
+                        <p class="fragment current-visible">Embedded performance is complicated</p>
+                        <p class="fragment current-visible">Making good art is hard</p>
+                        <p class="fragment current-visible">What you make depends on the limitations of the medium</p>
+                        <p class="fragment current-visible">The last 20% of the project is <b>very important</b></p>
+                        <p class="fragment current-visible">Do the fun side project</p>
+                    </div>
+                    <aside class="notes">
+                        <p>If you want to try this for yourself, use my affiliate link at checkout</p>
+                    </aside>
                 </section>
                 <section>
-                    <ul>
-                        <li>Making good art is hard</li>
-                        <li>Depends on the medium/limitations</li>
-                        <li>For a product like this doing this last part is VERY IMPORTANT</li>
-                        <li>Embedded performance is tricky</li>
-                    </ul>
-                </section>
-                <section>
-                    But wait there's more
+                    <h4>IKEA pls collab</h4>
+                    <img src="./assets/druedition.png" alt="a fake product listing for unlimited edition obegransad">
                 </section>
                 <section>
                     <h1>Thank you</h1>
                 </section>
-                <section>Plug/Links</section>
+                <section>
+                    <h3>Questions?</h3>
+                    <div class="r-vstack">
+                        <img width="200px" src="./assets/githubqr.svg" alt="qr for https://github.com/Drewbi">
+                        <small><a href="https://github.com/Drewbi">github.com/Drewbi</a></small>
+                    </div>
+                </section>
 			</div>
 		</div>
 
@@ -721,6 +828,8 @@
 				hash: true,
                 transition: "fade",
                 progress: false,
+                controlsTutorial: false,
+                slideNumber: true,
                 highlight: {
                     beforeHighlight: hljs => {
                         hljs.registerLanguage("toit", hljsToit)
